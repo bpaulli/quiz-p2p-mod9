@@ -1,5 +1,3 @@
-/// <reference path="../typings/sequelize/sequelize.d.ts" />
-
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define(
     'Quiz',
