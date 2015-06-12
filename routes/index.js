@@ -27,11 +27,12 @@ router.get('/logout', 						sessionController.destroysession);
 router.get('/quizes',                      	quizController.index);
 router.get('/quizes/:quizId(\\d+)',        	quizController.show);
 router.get('/quizes/:quizId(\\d+)/answer', 	quizController.answer);
-router.get('/quizes/new', 				   	quizController.newquestion);
-router.post('/quizes/create', 			   	quizController.create);
-router.get('/quizes/:quizId(\\d+)/edit',  	quizController.edit);
-router.put('/quizes/:quizId(\\d+)', 	 	quizController.update);
-router.delete('/quizes/:quizId(\\d+)', 	 	quizController.destroyquestion);
+router.get('/quizes/new', 				   	sessionController.loginRequired, quizController.newquestion);
+router.post('/quizes/create',              	sessionController.loginRequired, quizController.create);
+router.get('/quizes/:quizId(\\d+)/edit',   	sessionController.loginRequired, quizController.edit);
+router.put('/quizes/:quizId(\\d+)',       	sessionController.loginRequired, quizController.update);
+router.delete('/quizes/:quizId(\\d+)',     	sessionController.loginRequired, quizController.destroyquestion);
+
 
 // Definición de rutas de /Comments
 router.get('/quizes/:quizId(\\d+)/comments/new', commentController.newcomment);
