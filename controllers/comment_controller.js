@@ -7,7 +7,6 @@ exports.load = function(req, res, next, commentId) {
             }
         }).then(function(comment) {
       if (comment) {
-        console.log('encontro comentario con codigo '+ commentId);
         req.comment = comment;
         next();
       } else{ next(new Error('No existe commentId=' + commentId)); }
