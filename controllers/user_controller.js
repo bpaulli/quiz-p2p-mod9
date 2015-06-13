@@ -1,6 +1,9 @@
+/// <reference path="../typings/typescript/typescript.d.ts" />
+
+
 var users = {
-	admin: {id: 1, username: "admin", password: "1234"},
-	pepe: {id: 2, username: "pepe", password: "5678"},
+	admin: {id: 1, username: "admin", password: "1234", timestamp: new Date()},
+	pepe: {id: 2, username: "pepe", password: "5678", timestamp: new Date() },
 };
 
 exports.autenticar = function(login, password, callback) {
