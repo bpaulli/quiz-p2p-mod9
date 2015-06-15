@@ -126,12 +126,10 @@ exports.estadisticas = function (req, res) {
     function (results) {
       var cantidadPreg = results;
       
-      res.render('quizes/statistics', {cantidadPreg: cantidadPreg, cantidadCom: 0, numeroMedioPregCom: 0, numeroPreSinCom: 0, numeroPreConCom: 0, errors: []});
-      
-/*      models.Quiz.findAll({
+      models.Quiz.findAll({
             attributes: [[Sequelize.fn('COUNT', Sequelize.col('Quiz.id')), 'count']],
             include: [{ model: models.Comment, where: {QuizId: {not: 0}} }],
-            group: ['Quiz.id']
+            group: ['Quiz.id', 'Comments.id', 'Comments.texto', 'Comments.publicado', 'Comments.createdAt', 'Comments.updatedAt', 'Comments.QuizId']
           }).then(
         function (result) {
           var cantidadCom = 0;
@@ -143,6 +141,7 @@ exports.estadisticas = function (req, res) {
           var numeroPreSinCom =cantidadPreg - numeroPreConCom;
           var numeroMedioPregCom = (cantidadCom/cantidadPreg).toPrecision(3);
           res.render('quizes/statistics', {cantidadPreg: cantidadPreg, cantidadCom: cantidadCom, numeroMedioPregCom: numeroMedioPregCom, numeroPreSinCom: numeroPreSinCom, numeroPreConCom: numeroPreConCom, errors: []});
-        });*/
+        });
     });
 };
+
