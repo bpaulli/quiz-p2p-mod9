@@ -126,7 +126,9 @@ exports.estadisticas = function (req, res) {
     function (results) {
       var cantidadPreg = results;
       
-      models.Quiz.findAll({
+      res.render('quizes/statistics', {cantidadPreg: cantidadPreg, cantidadCom: 0, numeroMedioPregCom: 0, numeroPreSinCom: 0, numeroPreConCom: 0, errors: []});
+      
+/*      models.Quiz.findAll({
             attributes: [[Sequelize.fn('COUNT', Sequelize.col('Quiz.id')), 'count']],
             include: [{ model: models.Comment, where: {QuizId: {not: 0}} }],
             group: ['Quiz.id']
@@ -141,6 +143,6 @@ exports.estadisticas = function (req, res) {
           var numeroPreSinCom =cantidadPreg - numeroPreConCom;
           var numeroMedioPregCom = (cantidadCom/cantidadPreg).toPrecision(3);
           res.render('quizes/statistics', {cantidadPreg: cantidadPreg, cantidadCom: cantidadCom, numeroMedioPregCom: numeroMedioPregCom, numeroPreSinCom: numeroPreSinCom, numeroPreConCom: numeroPreConCom, errors: []});
-        });
+        });*/
     });
 };
