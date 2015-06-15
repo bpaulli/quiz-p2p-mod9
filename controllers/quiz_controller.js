@@ -126,17 +126,18 @@ exports.estadisticas = function (req, res) {
     function (results) {
       var cantidadPreg = results;
       
-      models.Quiz.findAll({
-            attributes: [[Sequelize.fn('COUNT', Sequelize.col('Quiz.id')), 'count']],
+      models.Quiz.count({
             include: [{ model: models.Comment, where: {QuizId: {not: 0}} }],
-            group: ['Quiz.id', 'Comments.id', 'Comments.texto', 'Comments.publicado', 'Comments.createdAt', 'Comments.updatedAt', 'Comments.QuizId']
+            group: ['Quiz.id']
           }).then(
         function (result) {
+          console.log(result);
+          
           var cantidadCom = 0;
           var numeroPreConCom = 0;
           result.forEach(function(quiz) {
             numeroPreConCom += 1;
-            cantidadCom += quiz.get('count');
+            cantidadCom += quiz.count;
           });
           var numeroPreSinCom =cantidadPreg - numeroPreConCom;
           var numeroMedioPregCom = (cantidadCom/cantidadPreg).toPrecision(3);
