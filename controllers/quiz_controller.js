@@ -1,15 +1,19 @@
+/// <reference path="../typings/express/express.d.ts" />
+/// <reference path="../typings/typescript/typescript.d.ts" />
+/// <reference path="../typings/sequelize/sequelize.d.ts" />
 
 var models = require('../models/models.js')
+var Sequelize = require('sequelize');
 
 exports.load = function(req, res, next, quizId) {
   models.Quiz.find({
-            where: { id: Number(quizId) },
+            where:  { id: Number(quizId) },
             include: [{ model: models.Comment }]
         }).then(function(quiz) {
-      if (quiz) {
-        req.quiz = quiz;
-        next();
-      } else{ next(new Error('No existe quizId=' + quizId)); }
+        if (quiz) {
+          req.quiz = quiz;
+          next();
+        } else{ next(new Error('No existe quizId=' + quizId)); }
     }
   ).catch(function(error){next(error); });
 };
@@ -113,5 +117,30 @@ exports.update = function(req, res) {
 exports.destroyquestion = function(req, res) {
   req.quiz.destroy().then( function() {
     res.redirect('/quizes');
-  }).catch(function(error){next(error)});
+  }).catch(function(error){ next(error); });
+};
+
+
+exports.estadisticas = function (req, res) {
+  models.Quiz.count().then(
+    function (results) {
+      var cantidadPreg = results;
+      
+      models.Quiz.findAll({
+            attributes: [[Sequelize.fn('COUNT', Sequelize.col('Quiz.id')), 'count']],
+            include: [{ model: models.Comment, where: {QuizId: {not: 0}} }],
+            group: ['Quiz.id']
+          }).then(
+        function (result) {
+          var cantidadCom = 0;
+          var numeroPreConCom = 0;
+          result.forEach(function(quiz) {
+            numeroPreConCom += 1;
+            cantidadCom += quiz.get('count');
+          });
+          var numeroPreSinCom =cantidadPreg - numeroPreConCom;
+          var numeroMedioPregCom = (cantidadCom/cantidadPreg).toPrecision(3);
+          res.render('quizes/statistics', {cantidadPreg: cantidadPreg, cantidadCom: cantidadCom, numeroMedioPregCom: numeroMedioPregCom, numeroPreSinCom: numeroPreSinCom, numeroPreConCom: numeroPreConCom, errors: []});
+        });
+    });
 };

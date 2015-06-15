@@ -16,7 +16,7 @@ exports.autologout = function(req, res, next){
             req.session.timestamp = new Date(); // actualizo la sesion
             next();
         } else {
-            console.log('Auto Logout:');
+            console.log('--- Auto Logout ---');
             delete req.session.user;
             res.redirect(req.session.redir.toString());
         }
